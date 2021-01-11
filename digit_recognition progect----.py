@@ -19,9 +19,17 @@ from keras.layers import Dense,Activation,Dropout
 from keras.utils import normalize, to_categorical
 from keras.optimizers import Adam
 
-
-
-
+#dataset
+X_train=pd.read_csv("dataset/digit_train.csv")
+X_test=pd.read_csv("dataset/digit_test.csv")
+y_train=X_train['target']
+y_test=X_test['target']
+X_train=X_train.iloc[:,0:-1]
+X_test=X_test.iloc[:,0:-1]
+X_train=X_train.to_numpy()
+X_test=X_test.to_numpy()
+y_train=y_train.to_numpy()
+y_test=y_test.to_numpy()
 
 # initialising the CNN
 classifier=Sequential()
@@ -33,13 +41,7 @@ classifier.add(MaxPooling2D(pool_size=(2,2)))
 classifier.add(Convolution2D(filters=32, kernel_size=(2,2), activation='relu'))
 #2nd maxpooling layer
 classifier.add(MaxPooling2D(pool_size=(2,2)))
-#preventing from overfitting by using dropout
-classifier.add(Dropout(0.1))
-# flattinenning
-classifier.add(Flatten())
-#Full connection
-classifier.add(Dense(128, activation='relu'))
-classifier.add(Dropout(0.1))
+#final layer
 classifier.add(Dense(10, activation='softmax'))
 #compile 
 opt=Adam(lr=0.001)
